@@ -7,6 +7,8 @@ import com.gregtechceu.gtceu.client.TooltipsHandler;
 import com.gregtechceu.gtceu.client.renderer.BlockHighLightRenderer;
 import com.gregtechceu.gtceu.client.renderer.MultiblockInWorldPreviewRenderer;
 import com.gregtechceu.gtceu.client.util.TooltipHelper;
+import com.gregtechceu.gtceu.common.commands.GTClientCommands;
+import com.gregtechceu.gtceu.integration.map.ClientCacheManager;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -54,5 +56,15 @@ public class ForgeClientEventListener {
             EnvironmentalHazardClientHandler.INSTANCE.onClientTick();
             GTValues.CLIENT_TIME++;
         }
+    }
+
+    @SubscribeEvent
+    public static void onClientDisconnect(ClientPlayerNetworkEvent.LoggingOut event) {
+        ClientCacheManager.allowReinit();
+    }
+
+    @SubscribeEvent
+    public static void registerClientCommand(RegisterClientCommandsEvent event) {
+        GTClientCommands.register(event.getDispatcher(), event.getBuildContext());
     }
 }
